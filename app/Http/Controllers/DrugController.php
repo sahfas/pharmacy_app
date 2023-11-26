@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Drug;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DrugController extends Controller
 {
@@ -15,8 +16,16 @@ class DrugController extends Controller
 
     public function dashboard()
     {
-        $drugs = Drug::all();
-        return view('dashboard', compact('drugs'));
+        $userType = Auth::user()->user_type;
+
+        if ($userType === 'pharmacist') {
+            $drugs = Drug::all();
+            return view('dashboard', compact('drugs'));
+        } elseif ($userType === 'user') {
+            return view('home');
+        } else {
+            return view('error');
+        }
     }
 
     public function store(Request $request)

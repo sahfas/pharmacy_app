@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DrugController;
+use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ProfileController;
 
 /*
@@ -19,9 +20,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', function () {
+    return view('home');
+})->middleware(['auth', 'verified'])->name('home');
+Route::get('/quotations', function () {
+    return view('quotations');
+})->middleware(['auth', 'verified'])->name('quotations');
+
 Route::get('/dashboard', [DrugController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/drugs.add', [DrugController::class, 'index'])->middleware(['auth', 'verified'])->name('drugs.add');
 
@@ -32,5 +37,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('drugs', DrugController::class)->only(['index', 'store', 'show']);
+Route::resource('prescriptions', PrescriptionController::class)->only(['store']);
 
 require __DIR__.'/auth.php';
